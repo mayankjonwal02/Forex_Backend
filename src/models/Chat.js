@@ -2,11 +2,11 @@
 const mongoose = require('mongoose');
 
 const chatSchema = new mongoose.Schema({
-  adminId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+  adminId: { type: String },
   groupName: { type: String, required: true },
-  participants: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
+  participants: [{ type: String }],
   messages: [{
-    senderId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+    senderId: { type: String },
     message: String,
     timestamp: { type: Date, default: Date.now },
   }],

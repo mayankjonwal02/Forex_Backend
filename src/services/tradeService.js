@@ -7,7 +7,9 @@ const createTrade = async (tradeData) => {
 };
 
 const getTradeHistoryByUser = async (userId) => {
-  return await Trade.find({ userId }).sort({ timestamp: -1 });
+  console.log(userId);
+  
+  return await Trade.find({ userId : userId}).sort({ timestamp: -1 });
 };
 
 const getTradeById = async (tradeId) => {

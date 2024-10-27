@@ -2,11 +2,11 @@
 const mongoose = require('mongoose');
 
 const fundedAccountSchema = new mongoose.Schema({
-  userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+  userId: { type: String, required: true },
   initialBalance: { type: Number, required: true },
   currentBalance: { type: Number, default: 0 },
   fundingProgram: { type: String, required: true },
-  activeTrades: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Trade' }],
+  activeTrades: [{ type: String  }],
   tradingRules: { type: String },
 }, { timestamps: true });
 

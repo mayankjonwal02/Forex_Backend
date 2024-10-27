@@ -5,8 +5,8 @@ const authService = require('../services/authService');
 
 router.post('/signup', async (req, res) => {
   try {
-    const { email, traderId } = req.body;
-    const user = await authService.registerUser({ email, traderId });
+    const { email, traderId , mobileNumber} = req.body;
+    const user = await authService.registerUser({ email, traderId , mobileNumber});
     res.status(201).json(user);
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -15,8 +15,8 @@ router.post('/signup', async (req, res) => {
 
 router.post('/login', async (req, res) => {
   try {
-    const { email, traderId, otp } = req.body;
-    const user = await authService.loginUser(email, traderId, otp);
+    const { email, traderId} = req.body;
+    const user = await authService.loginUser(email, traderId);
     if (!user) {
       return res.status(401).json({ error: 'Invalid credentials' });
     }
