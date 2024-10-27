@@ -13,4 +13,5 @@ connectDB();
 app.use(express.json());
 
 app.use('/api', mycontroller);
+
 module.exports = app;
