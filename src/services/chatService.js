@@ -15,7 +15,15 @@ const addMessageToChat = async (groupId, senderId, message) => {
 };
 
 const getChatById = async (groupId) => {
-  return await Chat.findById(groupId).populate('participants').populate('messages.senderId');
+  return await Chat.findById(groupId)
+    .populate('participants')
+    .populate('messages.senderId');
 };
 
-module.exports = { createChatGroup, addMessageToChat, getChatById };
+// Setting up Socket.IO instance (placeholder, ensure this function is correctly defined)
+let io;
+const setIoInstance = (ioInstance) => {
+  io = ioInstance;
+};
+
+module.exports = { createChatGroup, addMessageToChat, getChatById, setIoInstance };
