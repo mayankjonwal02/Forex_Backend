@@ -1,4 +1,3 @@
-// models/Analysis.js
 const mongoose = require('mongoose');
 
 const analysisSchema = new mongoose.Schema({

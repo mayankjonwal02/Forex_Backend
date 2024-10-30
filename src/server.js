@@ -1,9 +1,11 @@
 // src/server.js
-require('./config/dotenv'); // Load environment variables
-const app = require('./app'); // Import app as the default export
-const http = require('http'); // Import http module
-const { Server } = require('socket.io'); // Import socket.io
-const { setSocketIo } = require('./app'); // Import setSocketIo function from app
+require('./config/dotenv'); 
+const app = require('./app'); 
+const http = require('http'); 
+const { Server } = require('socket.io'); 
+const { setSocketIo } = require('./app'); 
+const User = require('./models/User'); 
+const chatService = require('./services/chatService'); 
 
 const PORT = process.env.PORT || 5000;
 
@@ -25,7 +27,31 @@ app.get("/", (req, res) => {
 io.on('connection', (socket) => {
   console.log('A user connected');
 
-  // Optionally listen for events emitted from the client
+  // Listen for messages being sent
+  socket.on('sendMessage', async ({ groupId, senderId, message }) => {
+    try {
+      // Find the user by senderId to check their role
+      const user = await User.findById(senderId);
+      if (!user) {
+        socket.emit('error', { message: 'User not found' });
+        return;
+      }
+
+      // Check if the user is an admin
+      if (user.role !== 'admin') {
+        socket.emit('error', { message: 'Only admins can send messages' });
+        return;
+      }
+
+      // If the user is an admin, add the message to the chat
+      const chat = await chatService.addMessageToChat(groupId, senderId, message);
+      io.to(groupId).emit('messageReceived', chat); // Notify others in the group
+    } catch (error) {
+      socket.emit('error', { message: error.message });
+    }
+  });
+
+  // Optionally listen for other events
   socket.on('disconnect', () => {
     console.log('User disconnected');
   });

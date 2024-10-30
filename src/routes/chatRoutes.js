@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const chatService = require('../services/chatService');
+const User = require('../models/User'); 
 
 router.post('/group/create', async (req, res) => {
   try {
@@ -24,7 +25,21 @@ router.post('/group/:groupId/message', async (req, res) => {
   try {
     const { groupId } = req.params;
     const { senderId, message } = req.body;
-    const chat = await chatService.addMessageToChat(groupId, senderId, message);
+
+    // Find the user by senderId to check their role
+    const user = await User.findById(senderId); 
+
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    // Check if the user is an admin
+    if (user.role !== 'admin') {
+      return res.status(403).json({ error: 'Only admins can send messages' });
+    }
+
+    // If the user is an admin, add the message to the chat
+    const chat = await chatService.addMessageToChat(groupId, user.username, message); 
     res.json(chat);
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -40,5 +55,18 @@ router.get('/group/:groupId', async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
+router.get('/group/:groupId/participants', async (req, res) => {
+  try {
+    const { groupId } = req.params;
+    const participants = await chatService.getParticipantsOfGroup(groupId);
+    
+    // Return the participants
+    res.json({ participants });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+
 
 module.exports = router;
