@@ -1,13 +1,20 @@
-// src/routes/chatRoutes.js
 const express = require('express');
 const router = express.Router();
 const chatService = require('../services/chatService');
 
 router.post('/group/create', async (req, res) => {
   try {
-    const { admin_id, group_name, participants } = req.body;
-    const group = await chatService.createChatGroup(admin_id, group_name, participants);
-    res.status(201).json(group);
+    const { admin_id, group_name } = req.body;
+    const group = await chatService.createChatGroup(admin_id, group_name);
+
+    // Send response without the participants array
+    res.status(201).json({
+      _id: group._id,
+      adminId: group.adminId,
+      groupName: group.groupName,
+      createdAt: group.createdAt,
+      updatedAt: group.updatedAt,
+    });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
