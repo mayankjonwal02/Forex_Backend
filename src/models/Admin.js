@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const bcrypt = require('bcrypt');
 
 const adminSchema = new mongoose.Schema({
   email: {
@@ -8,6 +9,10 @@ const adminSchema = new mongoose.Schema({
     trim: true,
     lowercase: true
   },
+  password: {
+    type: String,
+    required: true
+  },
   traderId: {
     type: String,
     required: false,
@@ -15,21 +20,22 @@ const adminSchema = new mongoose.Schema({
   },
   phoneNumber: {
     type: String,
-    required: false, 
+    required: false,
     trim: true
-  },
-  otp: {
-    type: String,
-    required: false
-  },
-  otpExpires: {
-    type: Date,
-    required: false
   },
   createdAt: {
     type: Date,
     default: Date.now
   }
+});
+
+// Hash password before saving
+adminSchema.pre('save', async function (next) {
+  if (this.isModified('password')) {
+    const salt = await bcrypt.genSalt(10);
+    this.password = await bcrypt.hash(this.password, salt);
+  }
+  next();
 });
 
 const Admin = mongoose.model('Admin', adminSchema);

@@ -5,27 +5,12 @@ const adminService = require('../services/adminService');
 // Admin signup
 router.post('/signup', async (req, res) => {
   try {
-    const { email, traderId, phoneNumber } = req.body;
-    const admin = await adminService.registerAdmin({ email, traderId, phoneNumber });
-    res.status(201).json({ message: 'OTP sent to your email', adminId: admin._id });
+    const { email, password } = req.body;
+    const admin = await adminService.signupAdmin(email, password);
+
+    res.status(201).json({ message: 'Signup successful', admin });
   } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-});
-
-// Admin login
-router.post('/login', async (req, res) => {
-  try {
-    const { email, otp } = req.body;
-    const admin = await adminService.loginAdmin(email, otp);
-
-    if (!admin) {
-      return res.status(401).json({ error: 'Invalid credentials or OTP expired' });
-    }
-
-    res.json({ message: 'Login successful', admin });
-  } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.status(400).json({ error: error.message });
   }
 });
 
