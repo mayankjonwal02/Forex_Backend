@@ -1,29 +1,84 @@
-// src/services/chatService.js
-const Chat = require('../models/Chat');
+const Chat = require("../models/Chat");
 
-const createChatGroup = async (adminId, groupName, participants) => {
-  const chatGroup = new Chat({ adminId, groupName, participants });
-  return await chatGroup.save();
+const createChatGroup = async (adminId, groupName) => {
+  try {
+    // Create the chat group without adding participants
+    const chatGroup = new Chat({
+      adminId,
+      groupName,
+      participants: [], // Initialize with an empty participants array
+    });
+
+    // Save and return the chat group
+    return await chatGroup.save();
+  } catch (error) {
+    throw new Error(`Error creating chat group: ${error.message}`);
+  }
 };
 
-const addMessageToChat = async (groupId, senderId, message) => {
-  return await Chat.findByIdAndUpdate(
-    groupId,
-    { $push: { messages: { senderId, message } } },
-    { new: true }
-  );
+const addMessageToChat = async (groupId, senderId, username, message) => {
+  try {
+    return await Chat.findByIdAndUpdate(
+      groupId,
+      { $push: { messages: { senderId, senderUsername: username, message } } },
+      { new: true }
+    );
+  } catch (error) {
+    throw new Error(`Error adding message to chat: ${error.message}`);
+  }
 };
 
 const getChatById = async (groupId) => {
-  return await Chat.findById(groupId)
-    .populate('participants')
-    .populate('messages.senderId');
+  try {
+    return await Chat.findById(groupId).populate("participants");
+  } catch (error) {
+    throw new Error(`Error fetching chat by ID: ${error.message}`);
+  }
 };
 
-// Setting up Socket.IO instance (placeholder, ensure this function is correctly defined)
 let io;
 const setIoInstance = (ioInstance) => {
   io = ioInstance;
 };
 
-module.exports = { createChatGroup, addMessageToChat, getChatById, setIoInstance };
+const addUserToAllGroups = async (username) => {
+  try {
+    // Find all chat groups and add the new user's username as a participant
+    const chatGroups = await Chat.find();
+
+    const updatePromises = chatGroups.map((group) => {
+      if (!group.participants.includes(username)) {
+        return Chat.findByIdAndUpdate(
+          group._id,
+          { $push: { participants: username } },
+          { new: true }
+        );
+      }
+      return Promise.resolve();
+    });
+
+    await Promise.all(updatePromises);
+  } catch (error) {
+    throw new Error(`Error adding username to all groups: ${error.message}`);
+  }
+};
+
+const getParticipantsOfGroup = async (groupId) => {
+  try {
+    const chatGroup = await Chat.findById(groupId).select("participants");
+    return chatGroup ? chatGroup.participants : [];
+  } catch (error) {
+    throw new Error(
+      `Error fetching participants of chat group: ${error.message}`
+    );
+  }
+};
+
+module.exports = {
+  createChatGroup,
+  addMessageToChat,
+  getChatById,
+  setIoInstance,
+  addUserToAllGroups,
+  getParticipantsOfGroup,
+};
