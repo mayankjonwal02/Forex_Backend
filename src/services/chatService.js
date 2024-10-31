@@ -1,35 +1,29 @@
 // src/services/chatService.js
-const Chat = require("../models/Chat");
-const Admin = require("../models/Admin"); // Import the Admin model
+const Chat = require('../models/Chat');
 
-const createChatGroup = async (adminId, groupName, participants = []) => {
+const createChatGroup = async (adminId, groupName, participants) => {
   const chatGroup = new Chat({ adminId, groupName, participants });
   return await chatGroup.save();
 };
 
 const addMessageToChat = async (groupId, senderId, message) => {
-  try {
-    const chatGroup = await Chat.findById(groupId);
-
-    // Check if sender is the admin of the group
-    if (chatGroup.adminId !== senderId) {
-      throw new Error("Only the admin can send messages in this group.");
-    }
-
-    // Add the message to the chat
-    chatGroup.messages.push({ senderId, message });
-    await chatGroup.save();
-
-    return chatGroup;
-  } catch (error) {
-    throw new Error(`Error adding message to chat: ${error.message}`);
-  }
+  return await Chat.findByIdAndUpdate(
+    groupId,
+    { $push: { messages: { senderId, message } } },
+    { new: true }
+  );
 };
 
 const getChatById = async (groupId) => {
   return await Chat.findById(groupId)
-    .populate("participants")
-    .populate("messages.senderId");
+    .populate('participants')
+    .populate('messages.senderId');
 };
 
-module.exports = { createChatGroup, addMessageToChat, getChatById };
+// Setting up Socket.IO instance (placeholder, ensure this function is correctly defined)
+let io;
+const setIoInstance = (ioInstance) => {
+  io = ioInstance;
+};
+
+module.exports = { createChatGroup, addMessageToChat, getChatById, setIoInstance };

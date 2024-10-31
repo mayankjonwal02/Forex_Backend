@@ -12,4 +12,8 @@ const chatSchema = new mongoose.Schema({
   }],
 }, { timestamps: true });
 
+<<<<<<< HEAD
 module.exports = mongoose.model("Chat", chatSchema);
+=======
+module.exports = mongoose.model('Chat', chatSchema);
+>>>>>>> parent of 45bec8b (chat api done)
