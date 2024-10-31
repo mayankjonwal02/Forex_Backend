@@ -1,10 +1,10 @@
-// src/services/adminService.js
 const Admin = require('../models/Admin');
 const nodemailer = require('nodemailer');
 
-// Function to generate a random OTP
+// Generate OTP
 const generateOTP = () => Math.floor(100000 + Math.random() * 900000).toString();
 
+// Send OTP email
 const sendOtpEmail = async (email, otp) => {
   const transporter = nodemailer.createTransport({
     service: 'Gmail',
@@ -24,9 +24,11 @@ const sendOtpEmail = async (email, otp) => {
   await transporter.sendMail(mailOptions);
 };
 
+// Register Admin
 const registerAdmin = async (adminData) => {
   const otp = generateOTP();
-  const admin = new Admin({ ...adminData, otp });
+  const otpExpires = Date.now() + 10 * 60 * 1000; 
+  const admin = new Admin({ ...adminData, otp, otpExpires });
 
   // Save admin with OTP
   await admin.save();
@@ -36,17 +38,26 @@ const registerAdmin = async (adminData) => {
   return admin;
 };
 
+// Login Admin
 const loginAdmin = async (email, otp) => {
   const admin = await Admin.findOne({ email });
-  if (!admin || admin.otp !== otp) {
-    return null; // Return null if no admin found or OTP doesn't match
+
+  
+  console.log("Admin found:", admin);
+  console.log("Input OTP:", otp);
+  console.log("Stored OTP:", admin ? admin.otp : null);
+  console.log("OTP expiration:", admin ? admin.otpExpires : null);
+
+  if (!admin || admin.otp !== otp || Date.now() > admin.otpExpires) {
+    return null; 
   }
 
-  // Clear OTP after successful login
+  
   admin.otp = undefined;
+  admin.otpExpires = undefined;
   await admin.save();
 
-  return admin; // Return admin object if login is successful
+  return admin;
 };
 
 module.exports = { registerAdmin, loginAdmin };

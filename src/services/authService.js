@@ -1,8 +1,7 @@
-// src/services/authService.js
 const User = require('../models/User');
 const nodemailer = require('nodemailer');
+const bcrypt = require('bcrypt');
 
-// Function to generate a random OTP
 const generateOTP = () => Math.floor(100000 + Math.random() * 900000).toString();
 
 const sendOtpEmail = async (email, otp) => {
@@ -18,7 +17,7 @@ const sendOtpEmail = async (email, otp) => {
     from: process.env.EMAIL_USER,
     to: email,
     subject: 'Your OTP Code',
-    text: `Your OTP code is ${otp}. It will expire in 10 minutes.` // Corrected this line
+    text: `Your OTP code is ${otp}. It will expire in 10 minutes.`
   };
 
   await transporter.sendMail(mailOptions);
@@ -26,18 +25,20 @@ const sendOtpEmail = async (email, otp) => {
 
 const registerUser = async (userData) => {
   const otp = generateOTP();
-  const user = new User({ ...userData, otp });
+  const hashedPassword = await bcrypt.hash(userData.password, 10);  // Hash the password
+  const user = new User({ ...userData, password: hashedPassword, otp });
   
-  // Save user with OTP
   await user.save();
-
-  // Send OTP to the user’s email
   await sendOtpEmail(userData.email, otp);
   return user;
 };
 
-const loginUser = async (email) => {
-  return await User.findOne({ email });
+const loginUser = async (email, password) => {
+  const user = await User.findOne({ email });
+  if (user && await bcrypt.compare(password, user.password)) {
+    return user;
+  }
+  return null;  
 };
 
 const getUserById = async (userId) => {

@@ -6,25 +6,32 @@ const adminSchema = new mongoose.Schema({
     required: true,
     unique: true,
     trim: true,
-    lowercase: true, // Convert to lowercase to avoid case sensitivity issues
+    lowercase: true
   },
   traderId: {
     type: String,
-    required: true,
-    unique: true, // Ensure trader ID is unique
+    required: false,
+    unique: true
   },
   phoneNumber: {
     type: String,
-    required: true,
-    trim: true,
+    required: false, 
+    trim: true
+  },
+  otp: {
+    type: String,
+    required: false
+  },
+  otpExpires: {
+    type: Date,
+    required: false
   },
   createdAt: {
     type: Date,
-    default: Date.now,
-  },
+    default: Date.now
+  }
 });
 
-// Create the Admin model
 const Admin = mongoose.model('Admin', adminSchema);
 
-module.exports = Admin; // Export the Admin model
+module.exports = Admin;

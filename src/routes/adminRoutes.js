@@ -1,9 +1,8 @@
-// src/routes/adminRoutes.js
 const express = require('express');
 const router = express.Router();
 const adminService = require('../services/adminService');
 
-// Route for admin signup
+// Admin signup
 router.post('/signup', async (req, res) => {
   try {
     const { email, traderId, phoneNumber } = req.body;
@@ -14,11 +13,16 @@ router.post('/signup', async (req, res) => {
   }
 });
 
-// Route for admin login
+// Admin login
 router.post('/login', async (req, res) => {
   try {
-    const { email, otp } = req.body; // Require email and OTP for login
+    const { email, otp } = req.body;
     const admin = await adminService.loginAdmin(email, otp);
+
+    if (!admin) {
+      return res.status(401).json({ error: 'Invalid credentials or OTP expired' });
+    }
+
     res.json({ message: 'Login successful', admin });
   } catch (error) {
     res.status(500).json({ error: error.message });
