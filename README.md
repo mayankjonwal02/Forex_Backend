@@ -3,8 +3,10 @@
 ### Authentication APIs
 
 #### 1. User Signup
+
 - **Route**: POST /api/auth/signup
 - **Request Body**:
+
 ```json
 {
   "email": "user@example.com",
@@ -12,7 +14,9 @@
   "mobileNumber": "+1234567890"
 }
 ```
+
 - **Response Body**:
+
 ```json
 {
   "id": "user_id",
@@ -24,15 +28,19 @@
 ```
 
 #### 2. User Login
+
 - **Route**: POST /api/auth/login
 - **Request Body**:
+
 ```json
 {
   "email": "user@example.com",
   "traderId": "TRADER123"
 }
 ```
+
 - **Response Body**:
+
 ```json
 {
   "id": "user_id",
@@ -46,8 +54,10 @@
 ### Trade APIs
 
 #### 1. Create Trade
+
 - **Route**: POST /api/trades/create
 - **Request Body**:
+
 ```json
 {
   "userId": "user_id",
@@ -57,7 +67,9 @@
   "tradeVolume": 1000
 }
 ```
+
 - **Response Body**:
+
 ```json
 {
   "id": "trade_id",
@@ -72,8 +84,10 @@
 ```
 
 #### 2. Get User Trade History
+
 - **Route**: GET /api/trades/user/:userId/history
 - **Response Body**:
+
 ```json
 [
   {
@@ -100,8 +114,10 @@
 ```
 
 #### 3. Get Trade by ID
+
 - **Route**: GET /api/trades/:tradeId
 - **Response Body**:
+
 ```json
 {
   "id": "trade_id",
@@ -118,8 +134,10 @@
 ### Funded Account APIs
 
 #### 1. Create Funded Account
+
 - **Route**: POST /api/funded-account/create
 - **Request Body**:
+
 ```json
 {
   "userId": "user_id",
@@ -128,7 +146,9 @@
   "tradingRules": "Max drawdown 10%, daily loss limit 5%"
 }
 ```
+
 - **Response Body**:
+
 ```json
 {
   "id": "account_id",
@@ -142,8 +162,10 @@
 ```
 
 #### 2. Get Funded Account by ID
+
 - **Route**: GET /api/funded-account/:accountId
 - **Response Body**:
+
 ```json
 {
   "id": "account_id",
@@ -164,14 +186,18 @@
 ```
 
 #### 3. Deposit Funds
+
 - **Route**: POST /api/funded-account/:accountId/deposit
 - **Request Body**:
+
 ```json
 {
   "amount": 5000
 }
 ```
+
 - **Response Body**:
+
 ```json
 {
   "id": "account_id",
@@ -183,14 +209,18 @@
 ```
 
 #### 4. Withdraw Funds
+
 - **Route**: POST /api/funded-account/:accountId/withdraw
 - **Request Body**:
+
 ```json
 {
   "amount": 3000
 }
 ```
+
 - **Response Body**:
+
 ```json
 {
   "id": "account_id",
@@ -204,8 +234,10 @@
 ### Course APIs
 
 #### 1. Create Course
+
 - **Route**: POST /api/courses/create
 - **Request Body**:
+
 ```json
 {
   "courseName": "Forex Trading Basics",
@@ -214,7 +246,9 @@
   "instructorId": "instructor_user_id"
 }
 ```
+
 - **Response Body**:
+
 ```json
 {
   "id": "course_id",
@@ -226,8 +260,10 @@
 ```
 
 #### 2. Get Course by ID
+
 - **Route**: GET /api/courses/:courseId
 - **Response Body**:
+
 ```json
 {
   "id": "course_id",
@@ -243,35 +279,50 @@
 ```
 
 #### 3. Update Course
+
 - **Route**: PUT /api/courses/:courseId
 - **Request Body**:
+
 ```json
 {
   "courseName": "Advanced Forex Trading",
   "description": "Master advanced forex trading techniques",
-  "modules": ["Advanced Technical Analysis", "Risk Management", "Trading Psychology"]
+  "modules": [
+    "Advanced Technical Analysis",
+    "Risk Management",
+    "Trading Psychology"
+  ]
 }
 ```
+
 - **Response Body**:
+
 ```json
 {
   "id": "course_id",
   "courseName": "Advanced Forex Trading",
   "description": "Master advanced forex trading techniques",
-  "modules": ["Advanced Technical Analysis", "Risk Management", "Trading Psychology"],
+  "modules": [
+    "Advanced Technical Analysis",
+    "Risk Management",
+    "Trading Psychology"
+  ],
   "instructorId": "instructor_user_id"
 }
 ```
 
 #### 4. Delete Course
+
 - **Route**: DELETE /api/courses/:courseId
 - **Response**: 204 No Content
 
 ### Chat APIs
 
 #### 1. Create Chat Group
+
 - **Route**: POST /api/chat/group/create
 - **Request Body**:
+
 ```json
 {
   "admin_id": "user_id",
@@ -279,7 +330,9 @@
   "participants": ["user_id_1", "user_id_2", "user_id_3"]
 }
 ```
+
 - **Response Body**:
+
 ```json
 {
   "id": "group_id",
@@ -291,15 +344,19 @@
 ```
 
 #### 2. Add Message to Chat
+
 - **Route**: POST /api/chat/group/:groupId/message
 - **Request Body**:
+
 ```json
 {
   "senderId": "user_id",
   "message": "Hello, traders!"
 }
 ```
+
 - **Response Body**:
+
 ```json
 {
   "id": "group_id",
@@ -317,8 +374,10 @@
 ```
 
 #### 3. Get Chat by ID
+
 - **Route**: GET /api/chat/group/:groupId
 - **Response Body**:
+
 ```json
 {
   "id": "group_id",

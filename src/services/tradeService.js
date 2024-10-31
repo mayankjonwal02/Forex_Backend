@@ -1,5 +1,5 @@
 // src/services/tradeService.js
-const Trade = require('../models/Trade');
+const Trade = require("../models/Trade");
 
 const createTrade = async (tradeData) => {
   const trade = new Trade(tradeData);
@@ -8,8 +8,8 @@ const createTrade = async (tradeData) => {
 
 const getTradeHistoryByUser = async (userId) => {
   console.log(userId);
-  
-  return await Trade.find({ userId : userId}).sort({ timestamp: -1 });
+
+  return await Trade.find({ userId: userId }).sort({ timestamp: -1 });
 };
 
 const getTradeById = async (tradeId) => {

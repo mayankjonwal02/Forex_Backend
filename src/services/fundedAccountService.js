@@ -1,5 +1,5 @@
 // src/services/fundedAccountService.js
-const FundedAccount = require('../models/FundedAccount');
+const FundedAccount = require("../models/FundedAccount");
 
 const createFundedAccount = async (accountData) => {
   const account = new FundedAccount(accountData);
@@ -7,7 +7,7 @@ const createFundedAccount = async (accountData) => {
 };
 
 const getFundedAccountById = async (accountId) => {
-  return await FundedAccount.findById(accountId).populate('activeTrades');
+  return await FundedAccount.findById(accountId).populate("activeTrades");
 };
 
 const depositFunds = async (accountId, amount) => {
@@ -26,4 +26,9 @@ const withdrawFunds = async (accountId, amount) => {
   );
 };
 
-module.exports = { createFundedAccount, getFundedAccountById, depositFunds, withdrawFunds };
+module.exports = {
+  createFundedAccount,
+  getFundedAccountById,
+  depositFunds,
+  withdrawFunds,
+};

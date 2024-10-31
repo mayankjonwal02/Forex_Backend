@@ -1,33 +1,52 @@
-// src/routes/tradeRoutes.js
-const express = require('express');
+// src/routes/fundedAccountRoutes.js
+const express = require("express");
 const router = express.Router();
-const tradeService = require('../services/tradeService');
+const fundedAccountService = require("../services/fundedAccountService");
 
-router.post('/create', async (req, res) => {
+router.post("/create", async (req, res) => {
   try {
-    const trade = await tradeService.createTrade(req.body);
-    res.status(201).json(trade);
+    const account = await fundedAccountService.createFundedAccount(req.body);
+    res.status(201).json(account);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 });
 
-router.get('/user/:userId/history', async (req, res) => {
+router.get("/:accountId", async (req, res) => {
   try {
-    const trades = await tradeService.getTradeHistoryByUser(req.params.userId);
-    res.json(trades);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-});
-
-router.get('/:tradeId', async (req, res) => {
-  try {
-    const trade = await tradeService.getTradeById(req.params.tradeId);
-    if (!trade) {
-      return res.status(404).json({ error: 'Trade not found' });
+    const account = await fundedAccountService.getFundedAccountById(
+      req.params.accountId
+    );
+    if (!account) {
+      return res.status(404).json({ error: "Funded account not found" });
     }
-    res.json(trade);
+    res.json(account);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+router.post("/:accountId/deposit", async (req, res) => {
+  try {
+    const { amount } = req.body;
+    const account = await fundedAccountService.depositFunds(
+      req.params.accountId,
+      amount
+    );
+    res.json(account);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+router.post("/:accountId/withdraw", async (req, res) => {
+  try {
+    const { amount } = req.body;
+    const account = await fundedAccountService.withdrawFunds(
+      req.params.accountId,
+      amount
+    );
+    res.json(account);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

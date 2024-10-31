@@ -1,5 +1,5 @@
 // src/middlewares/errorHandler.js
-const { CustomError } = require('../utils/errorHandler');
+const { CustomError } = require("../utils/errorHandler");
 
 // Error handling middleware
 const errorHandler = (err, req, res, next) => {
@@ -8,10 +8,10 @@ const errorHandler = (err, req, res, next) => {
   const statusCode = err.statusCode || 500;
   const response = {
     success: false,
-    message: err.message || 'Internal Server Error',
+    message: err.message || "Internal Server Error",
   };
 
-  if (process.env.NODE_ENV === 'development') {
+  if (process.env.NODE_ENV === "development") {
     response.stack = err.stack;
   }
 

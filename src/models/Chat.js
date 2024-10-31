@@ -1,19 +1,27 @@
-// src/models/Chat.js
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
-const chatSchema = new mongoose.Schema({
-  adminId: { type: String },
-  groupName: { type: String, required: true },
-  participants: [{ type: String }],
-  messages: [{
-    senderId: { type: String },
-    message: String,
+const messageSchema = new mongoose.Schema(
+  {
+    senderId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
+    senderUsername: { type: String, required: true },
+    message: { type: String, required: true },
     timestamp: { type: Date, default: Date.now },
-  }],
-}, { timestamps: true });
+  },
+  { timestamps: true }
+);
 
-<<<<<<< HEAD
+const chatSchema = new mongoose.Schema(
+  {
+    adminId: { type: String, required: true }, // Make sure this is required
+    groupName: { type: String, required: true },
+    participants: [{ type: String }],
+    messages: [messageSchema], // Use the new messageSchema
+  },
+  { timestamps: true }
+);
+
 module.exports = mongoose.model("Chat", chatSchema);
-=======
-module.exports = mongoose.model('Chat', chatSchema);
->>>>>>> parent of 45bec8b (chat api done)

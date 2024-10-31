@@ -1,4 +1,4 @@
-const Course = require('../models/Course');
+const Course = require("../models/Course");
 
 // Add a new course
 const addCourse = async (req, res) => {
@@ -7,7 +7,7 @@ const addCourse = async (req, res) => {
 
     // Check if all required fields are provided
     if (!title || !link || !image || numberOfLessons === undefined) {
-      return res.status(400).json({ error: 'All fields are required' });
+      return res.status(400).json({ error: "All fields are required" });
     }
 
     // Create a new course with the number of lessons
@@ -36,7 +36,7 @@ const getCourseById = async (req, res) => {
     const course = await Course.findById(req.params.id);
 
     if (!course) {
-      return res.status(404).json({ error: 'Course not found' });
+      return res.status(404).json({ error: "Course not found" });
     }
 
     res.status(200).json(course);
@@ -54,11 +54,11 @@ const updateCourse = async (req, res) => {
     const course = await Course.findByIdAndUpdate(
       req.params.id,
       { title, link, image, numberOfLessons },
-      { new: true, runValidators: true } 
+      { new: true, runValidators: true }
     );
 
     if (!course) {
-      return res.status(404).json({ error: 'Course not found' });
+      return res.status(404).json({ error: "Course not found" });
     }
 
     res.status(200).json(course);
@@ -73,10 +73,10 @@ const deleteCourse = async (req, res) => {
     const course = await Course.findByIdAndDelete(req.params.id);
 
     if (!course) {
-      return res.status(404).json({ error: 'Course not found' });
+      return res.status(404).json({ error: "Course not found" });
     }
 
-    res.status(204).json(); 
+    res.status(204).json();
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

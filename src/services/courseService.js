@@ -1,5 +1,5 @@
 // src/services/courseService.js
-const Course = require('../models/Course');
+const Course = require("../models/Course");
 
 const createCourse = async (courseData) => {
   const course = new Course(courseData);
@@ -7,7 +7,7 @@ const createCourse = async (courseData) => {
 };
 
 const getCourseById = async (courseId) => {
-  return await Course.findById(courseId).populate('instructorId');
+  return await Course.findById(courseId).populate("instructorId");
 };
 
 const updateCourse = async (courseId, updatedFields) => {

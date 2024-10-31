@@ -1,4 +1,4 @@
-const Analysis = require('../models/Analysis');
+const Analysis = require("../models/Analysis");
 
 // Controller function to add a new analysis
 const addAnalysis = async (req, res) => {
@@ -6,20 +6,22 @@ const addAnalysis = async (req, res) => {
     const { title, image, description } = req.body;
 
     if (!title || !image || !description) {
-      return res.status(400).json({ message: 'All fields are required.' });
+      return res.status(400).json({ message: "All fields are required." });
     }
 
     const newAnalysis = new Analysis({
       title,
       image,
-      description
+      description,
     });
 
     await newAnalysis.save();
-    res.status(201).json({ message: 'Analysis added successfully', analysis: newAnalysis });
+    res
+      .status(201)
+      .json({ message: "Analysis added successfully", analysis: newAnalysis });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: 'Server error. Please try again later.' });
+    res.status(500).json({ message: "Server error. Please try again later." });
   }
 };
 
@@ -30,7 +32,7 @@ const getAllAnalyses = async (req, res) => {
     res.status(200).json(analyses);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: 'Server error. Please try again later.' });
+    res.status(500).json({ message: "Server error. Please try again later." });
   }
 };
 
@@ -40,13 +42,13 @@ const getAnalysisById = async (req, res) => {
     const analysis = await Analysis.findById(req.params.id);
 
     if (!analysis) {
-      return res.status(404).json({ message: 'Analysis not found.' });
+      return res.status(404).json({ message: "Analysis not found." });
     }
 
     res.status(200).json(analysis);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: 'Server error. Please try again later.' });
+    res.status(500).json({ message: "Server error. Please try again later." });
   }
 };
 
@@ -63,13 +65,16 @@ const updateAnalysis = async (req, res) => {
     );
 
     if (!updatedAnalysis) {
-      return res.status(404).json({ message: 'Analysis not found.' });
+      return res.status(404).json({ message: "Analysis not found." });
     }
 
-    res.status(200).json({ message: 'Analysis updated successfully', analysis: updatedAnalysis });
+    res.status(200).json({
+      message: "Analysis updated successfully",
+      analysis: updatedAnalysis,
+    });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: 'Server error. Please try again later.' });
+    res.status(500).json({ message: "Server error. Please try again later." });
   }
 };
 
@@ -81,13 +86,13 @@ const deleteAnalysis = async (req, res) => {
     const deletedAnalysis = await Analysis.findByIdAndDelete(analysisId);
 
     if (!deletedAnalysis) {
-      return res.status(404).json({ message: 'Analysis not found.' });
+      return res.status(404).json({ message: "Analysis not found." });
     }
 
     res.status(204).send(); // No content
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: 'Server error. Please try again later.' });
+    res.status(500).json({ message: "Server error. Please try again later." });
   }
 };
 
@@ -96,5 +101,5 @@ module.exports = {
   getAllAnalyses,
   getAnalysisById,
   updateAnalysis,
-  deleteAnalysis
+  deleteAnalysis,
 };

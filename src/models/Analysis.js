@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
 const analysisSchema = new mongoose.Schema({
   title: {
@@ -16,7 +16,7 @@ const analysisSchema = new mongoose.Schema({
   createdAt: {
     type: Date,
     default: Date.now,
-  }
+  },
 });
 
-module.exports = mongoose.model('Analysis', analysisSchema);
+module.exports = mongoose.model("Analysis", analysisSchema);
