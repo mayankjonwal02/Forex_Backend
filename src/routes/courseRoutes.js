@@ -1,45 +1,26 @@
-// src/routes/courseRoutes.js
 const express = require('express');
 const router = express.Router();
-const courseService = require('../services/courseService');
+const { 
+  addCourse, 
+  getAllCourses, 
+  getCourseById, 
+  updateCourse, 
+  deleteCourse 
+} = require('../controllers/coursecontroller');
 
-router.post('/create', async (req, res) => {
-  try {
-    const course = await courseService.createCourse(req.body);
-    res.status(201).json(course);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-});
+// Route to add a new course
+router.post('/add', addCourse);
 
-router.get('/:courseId', async (req, res) => {
-  try {
-    const course = await courseService.getCourseById(req.params.courseId);
-    if (!course) {
-      return res.status(404).json({ error: 'Course not found' });
-    }
-    res.json(course);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-});
+// Route to retrieve all courses
+router.get('/', getAllCourses);
 
-router.put('/:courseId', async (req, res) => {
-  try {
-    const course = await courseService.updateCourse(req.params.courseId, req.body);
-    res.json(course);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-});
+// Route to retrieve a course by ID
+router.get('/:id', getCourseById);
 
-router.delete('/:courseId', async (req, res) => {
-  try {
-    await courseService.deleteCourse(req.params.courseId);
-    res.status(204).send();
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-});
+// Route to update a course by ID
+router.put('/:id', updateCourse);
+
+// Route to delete a course by ID
+router.delete('/:id', deleteCourse);
 
 module.exports = router;
