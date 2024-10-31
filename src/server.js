@@ -5,7 +5,6 @@ const http = require('http'); // Import http module
 const { Server } = require('socket.io'); // Import socket.io
 const { setSocketIo } = require('./app'); // Import setSocketIo function from app
 
-
 const PORT = process.env.PORT || 5001;
 
 // Create HTTP server
